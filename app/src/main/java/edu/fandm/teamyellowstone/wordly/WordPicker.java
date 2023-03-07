@@ -3,6 +3,8 @@ package edu.fandm.teamyellowstone.wordly;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,9 +13,26 @@ import java.util.Random;
 public class WordPicker {
     private static final Random random = new Random();
 
-    public static String pickRandomWord(String filePath) throws IOException {
+    public static Graph loadFile(InputStream inputStream) throws IOException{
         List<String> words = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        Graph graph = new Graph();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                graph.addWord(line.trim());
+            }
+        }
+        if (graph.isEmpty()) {
+            throw new IllegalArgumentException("File contains no words.");
+        }
+
+        return graph;
+
+    }
+
+    public static String pickRandomWord(InputStream inputStream) throws IOException {
+        List<String> words = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 words.add(line.trim());

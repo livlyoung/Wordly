@@ -69,5 +69,12 @@ public class Graph {
         }
         return numDifferences == 1;
     }
+
+    public boolean isEmpty(){
+        return adjList.isEmpty();
+
+    }
+
+
 }
 

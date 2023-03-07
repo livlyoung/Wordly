@@ -11,27 +11,29 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
     private String startWord;
     private String endWord;
+    private  EditText startWord_et;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        EditText startWord_et = (EditText) findViewById(R.id.startWord);
-        EditText endWord_et = (EditText) findViewById(R.id.endWord);
+    private EditText endWord_et;
 
+
+    public void setStartandEndWords(){
+        startWord_et = (EditText) findViewById(R.id.startWord);
+        endWord_et = (EditText) findViewById(R.id.endWord);
 
         try {
-            startWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
+            startWord = WordPicker.pickRandomWord(getAssets().open("words_gwicks.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try {
-            endWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
+            endWord = WordPicker.pickRandomWord(getAssets().open("words_gwicks.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
         if(startWord.length() != endWord.length()){
             while(startWord.length() != endWord.length()){
                 try {
-                    startWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
+                    startWord = WordPicker.pickRandomWord(getAssets().open("words_gwicks.txt"));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 try {
-                    endWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
+                    endWord = WordPicker.pickRandomWord(getAssets().open("words_gwicks.txt"));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -54,23 +56,35 @@ public class MainActivity extends AppCompatActivity {
         startWord_et.setText(startWord);
         endWord_et.setText(endWord);
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setStartandEndWords();
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Graph graph = WordPicker.loadFile(getAssets().open("words_gwicks.txt"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        });
+
+
+
 
         Button newPuzzleButton = (Button) findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    startWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    endWord = WordPicker.pickRandomWord("Users/liv/Downloads/words_gwicks.txt");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                startWord_et.setText(startWord);
-                endWord_et.setText(endWord);
+                setStartandEndWords();
             }
         });
 
