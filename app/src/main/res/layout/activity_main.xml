@@ -5,11 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/startWord"
+        android:hint="Start Word"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="@id/endWord"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/newPuzzle"
+        />
+
+    <EditText
+        android:id="@+id/endWord"
+        android:hint="End Word"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/startWord"
+        app:layout_constraintBottom_toTopOf="@id/newPuzzle"
+        />
+
     <Button
+        android:id="@+id/newPuzzle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game"
-        android:id="@+id/startGame"
+        android:text="New Puzzle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startWord"
+        app:layout_constraintBottom_toTopOf="@id/play"
+
+        />
+    <Button
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
