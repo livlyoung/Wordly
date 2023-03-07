@@ -2,10 +2,18 @@ package edu.fandm.teamyellowstone.wordly;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,13 +33,72 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Game extends AppCompatActivity {
     Boolean playing = true;
-    String currentWord = "dog";
+    private GraphViewAdapter graphViewAdapter;
+    private GridView graphGridView;
+    ArrayList<String> words = new ArrayList<>();
+    String currentWord;
+    int missingWords;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        changeImgWord(currentWord);
 
+        words.add("dog");
+        words.add("cat");
+        words.add("bird");
+        words.add("fish");
+
+
+
+        // after words are added to arraylist
+        currentWord= words.get(0);
+        changeImgWord(currentWord);
+        missingWords= words.size()-2;
+
+        graphViewAdapter = new GraphViewAdapter(this, words);
+        graphGridView = findViewById(R.id.graphListView);
+        graphGridView.setAdapter(graphViewAdapter);
+        graphViewAdapter.notifyDataSetChanged();
+
+        graphGridView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedWord = words.get(position);
+            TextView text = view.findViewById(R.id.itemET);
+            if(text.getText() == selectedWord){
+                return; // Already guessed
+            }
+            // Create a new dialog to ask for the user's guess
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Guess the word");
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                String userGuess = input.getText().toString();
+                if (userGuess.equalsIgnoreCase(selectedWord)) {
+                    // Correct guess
+                    Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+                    missingWords--;
+                    text.setText(selectedWord);
+                    if(missingWords==0){
+                        endGame();
+                    }else {
+                        //change word being displayed
+                    }
+
+                }
+                else if (userGuess.length() != selectedWord.length()) {
+                    // Incorrect guess length
+                    Toast.makeText(this, "Wrong length! Try again.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // Incorrect guess
+                    Toast.makeText(this, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.show();
+
+        });
     }
 
 
@@ -60,6 +128,9 @@ public class Game extends AppCompatActivity {
                     JSONArray hits = json.getJSONArray("hits");
                     int i =0;
                     while(currentWord == current){
+                        if(!playing){
+                            break;
+                        }
                         getImg(new URL(hits.getJSONObject(i).getString("webformatURL")));
                         Thread.sleep(3000);
                         i++;
@@ -107,6 +178,16 @@ public class Game extends AppCompatActivity {
         });
     }
 
+    private void endGame(){
+        playing = false;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(Game.this, "You win!", Toast.LENGTH_SHORT).show();
+                graphGridView.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
 
 
