@@ -3,11 +3,13 @@ package edu.fandm.teamyellowstone.wordly;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,6 +66,9 @@ public class Game extends AppCompatActivity {
         setupguessedList();
 
         graphGridView.setOnItemClickListener((parent, view, position, id) -> {
+            if(currentWord != words.get(position)){
+                changeImgWord(words.get(position));
+            }
             String selectedWord = words.get(position);
             TextView text = view.findViewById(R.id.itemET);
             if(text.getText() == selectedWord){
@@ -99,12 +104,10 @@ public class Game extends AppCompatActivity {
                 else if (userGuess.length() != selectedWord.length()) {
                     // Incorrect guess length
                     Toast.makeText(this, "Wrong length! Try again.", Toast.LENGTH_SHORT).show();
-                    changeImgWord(words.get(position));
                 }
                 else {
                     // Incorrect guess
                     Toast.makeText(this, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
-                    changeImgWord(words.get(position));
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -197,17 +200,33 @@ public class Game extends AppCompatActivity {
     }
 
     private void endGame(){
+        words.clear();
         playing = false;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(Game.this, "You win!", Toast.LENGTH_SHORT).show();
                 graphGridView.setVisibility(View.INVISIBLE);
+                Button button = findViewById(R.id.hintButton);
+                button.setVisibility(View.INVISIBLE);
                 ImageView imageView = findViewById(R.id.hintImage);
                 imageView.setImageResource(R.drawable.star);
+
+                // Add touch listener to the root view
+                View root = getWindow().getDecorView().getRootView();
+                root.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        // Finish the current activity when the user taps the screen
+                        finish();
+                        return true;
+                    }
+                });
             }
         });
     }
+
+
     private void setupguessedList(){
         for(int i = 0; i<words.size(); i++) {
             if (i == 0 || i == words.size() - 1) {
@@ -248,6 +267,16 @@ public class Game extends AppCompatActivity {
         } else {
             return Character.toString(s2.charAt(index));
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+    Log.d("back", "back");
+    words.clear();
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivity(intent);
+    finishAffinity();
+
     }
 
 
