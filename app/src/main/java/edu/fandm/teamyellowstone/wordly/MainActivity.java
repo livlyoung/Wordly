@@ -21,17 +21,12 @@ import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private String startWord;
     private String endWord;
     private  EditText startWord_et;
-
     public static TextView loadingTextView;
-
     private  Graph graph = new Graph();
-
     private EditText endWord_et;
-
     public List<String> shortestPath;
 
     @Override
@@ -39,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
-
-
-
 
     public void setStartandEndWords(){
         startWord_et = (EditText) findViewById(R.id.startWord);
@@ -81,19 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadingTextView = findViewById(R.id.loading_text_view);
-
-
         loadingTextView.setVisibility(View.VISIBLE);
         setStartandEndWords();
-
-
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new Runnable() {
@@ -108,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         Button newPuzzleButton = (Button) findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
         Button startButton = findViewById(R.id.play);
