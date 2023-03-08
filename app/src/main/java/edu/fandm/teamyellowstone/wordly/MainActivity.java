@@ -34,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> shortestPath;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
+
 
 
 
