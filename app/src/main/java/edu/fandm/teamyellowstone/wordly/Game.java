@@ -7,7 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -26,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,18 +38,16 @@ public class Game extends AppCompatActivity {
     Boolean playing = true;
     private GraphViewAdapter graphViewAdapter;
     private GridView graphGridView;
-    ArrayList<String> words = new ArrayList<>();
+    private static ArrayList<String>  words = new ArrayList<>();
     String currentWord;
     int missingWords;
+    ArrayList<Boolean> guessedList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        words.add("dog");
-        words.add("cat");
-        words.add("bird");
-        words.add("fish");
 
 
 
@@ -60,12 +61,12 @@ public class Game extends AppCompatActivity {
         graphGridView = findViewById(R.id.graphListView);
         graphGridView.setAdapter(graphViewAdapter);
         graphViewAdapter.notifyDataSetChanged();
-
+        setupguessedList();
 
         graphGridView.setOnItemClickListener((parent, view, position, id) -> {
             String selectedWord = words.get(position);
             TextView text = view.findViewById(R.id.itemET);
-            if(text.getText() == "1"){
+            if(text.getText() == selectedWord){
                 return; // Already guessed
             }
             // Create a new dialog to ask for the user's guess
@@ -79,13 +80,18 @@ public class Game extends AppCompatActivity {
                 if (userGuess.equalsIgnoreCase(selectedWord)) {
                     // Correct guess
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+                    guessedList.set(position, true);
                     missingWords--;
                     text.setText(selectedWord);
-                    words.set(position, "1");
                     if(missingWords==0){
                         endGame();
                     }else {
-                        //change word being displayed
+                        for(int i=0; i<guessedList.size(); i++){
+                            if(!guessedList.get(i)){
+                                changeImgWord(words.get(i));
+                                break;
+                            }
+                        }
 
                     }
 
@@ -105,6 +111,15 @@ public class Game extends AppCompatActivity {
             builder.show();
 
         });
+
+        Button button = findViewById(R.id.hintButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String hint = getHintLetter(words.get(words.indexOf(currentWord)-1),currentWord );
+                Toast.makeText(getApplicationContext(), hint, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -116,7 +131,6 @@ public class Game extends AppCompatActivity {
                 try {
                     currentWord = word;
                     String current = currentWord;
-                    System.out.println("Changing image");
                     String apiKey = "34188491-f127f0cfa95dbc5ad739452a2";
                     String query = word;
                     URL url = new URL("https://pixabay.com/api/?key=" + apiKey + "&q=" + query + "&image_type=photo");
@@ -147,7 +161,6 @@ public class Game extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    System.out.println("Error");
                     e.printStackTrace();
                 }
             }
@@ -155,7 +168,6 @@ public class Game extends AppCompatActivity {
     }
 
     private void getImg(URL url){
-        System.out.println("Getting image");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new Runnable() {
             @Override
@@ -175,7 +187,6 @@ public class Game extends AppCompatActivity {
                         public void run() {
                             ImageView imageView = findViewById(R.id.hintImage);
                             imageView.setImageBitmap(bitmap);
-                            System.out.println("Image set");
                         }
                     });
                 } catch (Exception e) {
@@ -192,11 +203,52 @@ public class Game extends AppCompatActivity {
             public void run() {
                 Toast.makeText(Game.this, "You win!", Toast.LENGTH_SHORT).show();
                 graphGridView.setVisibility(View.INVISIBLE);
+                ImageView imageView = findViewById(R.id.hintImage);
+                imageView.setImageResource(R.drawable.star);
             }
         });
     }
+    private void setupguessedList(){
+        for(int i = 0; i<words.size(); i++) {
+            if (i == 0 || i == words.size() - 1) {
+                guessedList.add(true);
+            } else {
+                guessedList.add(false);
+            }
+        }
+    }
 
+    public static void setWords(List<String> list) {
+        System.out.println("setWords");
 
+        for (int i = 0; i < list.size(); i++) {
+            words.add(list.get(i));
+        }
+    }
+
+    public static String getHintLetter(String s1, String s2) {
+        Log.d("hint", s1 + " " + s2);
+        if (s1.length() != s2.length()) {
+            return "error";
+        }
+
+        int index = -1;
+        for (int i = 0; i < s1.length(); i++) {
+            if (s1.charAt(i) != s2.charAt(i)) {
+                if (index == -1) {
+                    index = i;
+                } else {
+                    return "error";
+                }
+            }
+        }
+
+        if (index == -1) {
+            return "error";
+        } else {
+            return Character.toString(s2.charAt(index));
+        }
+    }
 
 
 

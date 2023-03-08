@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Shortest Path:", shortestPath.get(i));
 
                         };
-
+                        Game.setWords(shortestPath);
                         Intent i = new Intent(getApplicationContext(), Game.class);
                         startActivity(i);
 
