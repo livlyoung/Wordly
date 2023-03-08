@@ -31,6 +31,9 @@ public class Graph {
         Queue<String> queue = new LinkedList<>();
         queue.add(start);
         parentMap.put(start, null);
+        if(!adjList.containsKey(start) || !adjList.containsKey(end)){
+            return null;
+        }
 
         while (!queue.isEmpty()) {
             String current = queue.remove();

@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText endingWord_et = (EditText) findViewById(R.id.endWord);
                 String startingWord = startingWord_et.getText().toString();
                 String endingWord = endingWord_et.getText().toString();
-                if(startingWord.length() != endingWord.length() /*|| startingWord.length() > 6*/){
+                if(startingWord.length() != endingWord.length()){
                     Toast.makeText(getApplicationContext(), "The words need to be the same length.", Toast.LENGTH_LONG).show();
 
                 }else{
