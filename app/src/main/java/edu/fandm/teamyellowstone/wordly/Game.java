@@ -51,19 +51,21 @@ public class Game extends AppCompatActivity {
 
 
         // after words are added to arraylist
-        currentWord= words.get(0);
+        currentWord= words.get(1);
         changeImgWord(currentWord);
         missingWords= words.size()-2;
+
 
         graphViewAdapter = new GraphViewAdapter(this, words);
         graphGridView = findViewById(R.id.graphListView);
         graphGridView.setAdapter(graphViewAdapter);
         graphViewAdapter.notifyDataSetChanged();
 
+
         graphGridView.setOnItemClickListener((parent, view, position, id) -> {
             String selectedWord = words.get(position);
             TextView text = view.findViewById(R.id.itemET);
-            if(text.getText() == selectedWord){
+            if(text.getText() == "1"){
                 return; // Already guessed
             }
             // Create a new dialog to ask for the user's guess
@@ -79,20 +81,24 @@ public class Game extends AppCompatActivity {
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                     missingWords--;
                     text.setText(selectedWord);
+                    words.set(position, "1");
                     if(missingWords==0){
                         endGame();
                     }else {
                         //change word being displayed
+
                     }
 
                 }
                 else if (userGuess.length() != selectedWord.length()) {
                     // Incorrect guess length
                     Toast.makeText(this, "Wrong length! Try again.", Toast.LENGTH_SHORT).show();
+                    changeImgWord(words.get(position));
                 }
                 else {
                     // Incorrect guess
                     Toast.makeText(this, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                    changeImgWord(words.get(position));
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -108,6 +114,7 @@ public class Game extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    currentWord = word;
                     String current = currentWord;
                     System.out.println("Changing image");
                     String apiKey = "34188491-f127f0cfa95dbc5ad739452a2";
