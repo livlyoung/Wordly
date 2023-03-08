@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The words need to be the same length.", Toast.LENGTH_LONG).show();
 
                 }else{
-                    loadingTextView.setVisibility(View.VISIBLE);
                     shortestPath = graph.shortestPath(startingWord,endingWord);
 
                     if(shortestPath == null){

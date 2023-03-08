@@ -52,8 +52,6 @@ public class Graph {
             }
         }
 
-        // If we get here, there is no path from start to end
-        MainActivity.loadingTextView.setVisibility(View.GONE);
         return null;
     }
 
