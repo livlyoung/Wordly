@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,7 +21,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+
+    private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private String startWord;
     private String endWord;
     private  EditText startWord_et;
@@ -76,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        if (prefs.getBoolean(IS_FIRST_TIME_LAUNCH, true)) {
+            // The app is being launched for the first time
+            prefs.edit().putBoolean(IS_FIRST_TIME_LAUNCH, false).apply();
+
+            // Do your first time operations here
+        }
+
+
         setContentView(R.layout.activity_main);
         loadingTextView = findViewById(R.id.loading_text_view);
         loadingTextView.setVisibility(View.VISIBLE);
