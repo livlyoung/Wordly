@@ -19,7 +19,10 @@ public class WordPicker {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                graph.addWord(line.trim());
+                if(line.trim().length() < 5){
+                    graph.addWord(line.trim());
+                }
+
             }
         }
         if (graph.isEmpty()) {
@@ -35,7 +38,10 @@ public class WordPicker {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                words.add(line.trim());
+                if(line.trim().length() < 5) {
+                    words.add(line.trim());
+                }
+
             }
         }
         if (words.isEmpty()) {
