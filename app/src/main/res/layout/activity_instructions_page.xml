@@ -1,0 +1,41 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Image View to display the instructions image -->
+    <ImageView
+        android:id="@+id/instructions_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/instruction_image"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Text View to display the instructions message -->
+    <TextView
+        android:id="@+id/instructions_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Wordly! This game will challenge you to transform a given start word to a given end word by changing ONLY one letter at a time.  For example, starting from the word “cute” transform to the word to “cope.” Each time after changing one letter, you MUST arrive at another valid word."
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:lineSpacingExtra="10sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Button to continue to the game -->
+    <Button
+        android:id="@+id/continue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue to Game"
+        android:textColor="@android:color/white"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="18sp"/>
+
+</LinearLayout>

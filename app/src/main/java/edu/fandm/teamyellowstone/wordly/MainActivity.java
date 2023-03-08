@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         if (prefs.getBoolean(IS_FIRST_TIME_LAUNCH, true)) {
             // The app is being launched for the first time
             prefs.edit().putBoolean(IS_FIRST_TIME_LAUNCH, false).apply();
+            Intent i = new Intent(getApplicationContext(), InstructionsPage.class);
+            startActivity(i);
 
             // Do your first time operations here
         }
