@@ -9,8 +9,11 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,7 +23,11 @@ public class MainActivity extends AppCompatActivity {
     private String endWord;
     private  EditText startWord_et;
 
+    private  Graph graph = new Graph();
+
     private EditText endWord_et;
+
+    public List<String> shortestPath = new ArrayList<>();
 
 
     public void setStartandEndWords(){
@@ -69,13 +76,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Graph graph = WordPicker.loadFile(getAssets().open("words_gwicks.txt"));
+                    graph = WordPicker.loadFile(getAssets().open("words_gwicks.txt"));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
 
             }
         });
+
+
+
 
 
 
@@ -95,8 +105,32 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Game.class);
-                startActivity(i);
+                EditText startingWord_et = (EditText) findViewById(R.id.startWord);
+                EditText endingWord_et = (EditText) findViewById(R.id.endWord);
+                String startingWord = startingWord_et.getText().toString();
+                String endingWord = endingWord_et.getText().toString();
+                if(startingWord.length() != endingWord.length()){
+                    Toast.makeText(getApplicationContext(), "The words need to be the same length", Toast.LENGTH_LONG).show();
+
+                }else{
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            shortestPath = graph.shortestPath(startingWord,endingWord);
+                        }
+                    });
+
+                    if(shortestPath == null){
+                        Toast.makeText(getApplicationContext(), "A path between these two words does not exist", Toast.LENGTH_LONG).show();
+                    }else{
+                        Intent i = new Intent(getApplicationContext(), Game.class);
+                        startActivity(i);
+
+                    }
+
+                }
+
             }
         });
 
