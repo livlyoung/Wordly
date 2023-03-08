@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText startingWord_et = (EditText) findViewById(R.id.startWord);
                 EditText endingWord_et = (EditText) findViewById(R.id.endWord);
-                String startingWord = startingWord_et.getText().toString();
-                String endingWord = endingWord_et.getText().toString();
+                String startingWord = startingWord_et.getText().toString().toLowerCase();
+                String endingWord = endingWord_et.getText().toString().toLowerCase();
                 if(startingWord.length() != endingWord.length()){
                     Toast.makeText(getApplicationContext(), "The words need to be the same length.", Toast.LENGTH_LONG).show();
 
