@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        if(startWord.length() != endWord.length()){
+        if(startWord.length() != endWord.length() || startWord.length() > 4){
             while(startWord.length() != endWord.length()){
                 try {
                     startWord = WordPicker.pickRandomWord(getAssets().open("words_gwicks.txt"));
@@ -86,10 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
         Button newPuzzleButton = (Button) findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText endingWord_et = (EditText) findViewById(R.id.endWord);
                 String startingWord = startingWord_et.getText().toString();
                 String endingWord = endingWord_et.getText().toString();
-                if(startingWord.length() != endingWord.length()){
+                if(startingWord.length() != endingWord.length() || startingWord.length() > 4){
                     Toast.makeText(getApplicationContext(), "The words need to be the same length", Toast.LENGTH_LONG).show();
 
                 }else{
