@@ -15,6 +15,10 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Hide the button bar
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         setContentView(R.layout.activity_splash_screen);
         setContentView(R.layout.activity_splash_screen);
         View rootView = findViewById(R.id.rootview);
@@ -25,6 +29,7 @@ public class SplashScreen extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
+        //Hide Action Bar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
