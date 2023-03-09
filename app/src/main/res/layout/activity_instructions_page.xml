@@ -39,7 +39,8 @@
             android:textColor="@android:color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 </ScrollView>
