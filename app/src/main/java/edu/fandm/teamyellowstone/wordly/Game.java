@@ -13,6 +13,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -206,6 +208,7 @@ public class Game extends AppCompatActivity {
     }
 
     private void endGame(){
+        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink);
         words.clear();
         playing = false;
         runOnUiThread(new Runnable() {
@@ -217,6 +220,7 @@ public class Game extends AppCompatActivity {
                 button.setVisibility(View.INVISIBLE);
                 ImageView imageView = findViewById(R.id.hintImage);
                 imageView.setImageResource(R.drawable.star);
+                imageView.startAnimation(a);
 
                 // Add touch listener to the root view
                 View root = getWindow().getDecorView().getRootView();
@@ -224,6 +228,7 @@ public class Game extends AppCompatActivity {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         // Finish the current activity when the user taps the screen
+                        imageView.clearAnimation();
                         finish();
                         return true;
                     }
