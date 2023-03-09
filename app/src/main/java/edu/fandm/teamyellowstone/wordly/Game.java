@@ -1,5 +1,7 @@
 package edu.fandm.teamyellowstone.wordly;
 
+//Assisted by github copiolet
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
@@ -78,7 +80,7 @@ public class Game extends AppCompatActivity {
             if(text.getText() == selectedWord){
                 return; // Already guessed
             }
-            // Create a new dialog to ask for the user's guess
+            // Create a new dialog to ask for the user's guess (ChatGPT assisted)
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Guess the word");
             final EditText input = new EditText(this);
