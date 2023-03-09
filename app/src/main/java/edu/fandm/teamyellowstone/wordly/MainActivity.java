@@ -135,22 +135,21 @@ public class MainActivity extends AppCompatActivity {
 
                 }else{
                     shortestPath = graph.shortestPath(startingWord,endingWord);
-
                     if(shortestPath == null){
                         Toast.makeText(getApplicationContext(), "A path between these two words does not exist", Toast.LENGTH_LONG).show();
+                    }else if(shortestPath.size() <= 2){
+                        Toast.makeText(getApplicationContext(), "the path between these words is only one letter difference, no game can be played.", Toast.LENGTH_LONG).show();
+
                     }else{
                         for(int i = 0; i < shortestPath.size(); i++){
-                            Log.d("Shortest Path:", shortestPath.get(i));
-
+                            Log.d("Shortest Path at i:", shortestPath.get(i));
                         };
                         Game.setWords(shortestPath);
                         Intent i = new Intent(getApplicationContext(), Game.class);
                         startActivity(i);
 
                     }
-
                 }
-
             }
         });
 
